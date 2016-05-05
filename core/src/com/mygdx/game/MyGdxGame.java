@@ -56,9 +56,16 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
     /// <input-processor>
     @Override
-    public boolean keyDown (int keycode) {
-        return false;
+    public boolean touchDown (int x, int y, int pointer, int button) {
+        if(this.red > 0)
+            this.red = 0.0f;
+        else
+            this.red = 1.0f;
+        System.out.println("clicked");
+        return true;
     }
+    @Override
+    public boolean keyDown (int keycode) { return false; }
 
     @Override
     public boolean keyUp (int keycode) {
@@ -68,16 +75,6 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean keyTyped (char character) {
         return false;
-    }
-
-    @Override
-    public boolean touchDown (int x, int y, int pointer, int button) {
-        if(this.red > 0)
-            this.red = 0.0f;
-        else
-            this.red = 1.0f;
-        System.out.println("clicked");
-        return true;
     }
 
     @Override
