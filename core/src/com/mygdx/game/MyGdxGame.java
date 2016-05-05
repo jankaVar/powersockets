@@ -24,6 +24,20 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         img = new Texture("badlogic.jpg");
 
         Gdx.input.setInputProcessor(this);
+
+        /*
+        TODO use non-continuous rendering to save on battery:
+        Gdx.graphics.setContinuousRendering(false);
+        Gdx.graphics.requestRendering();
+
+        If continuous rendering is set to false, the render() method will be called only when the following things happen.
+            An input event is triggered
+            Gdx.graphics.requestRendering() is called
+            Gdx.app.postRunnable() is called
+
+        */
+
+        Level.generateLevel2();
     }
 
     @Override
