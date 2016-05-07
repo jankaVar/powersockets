@@ -30,4 +30,7 @@ public abstract class Connectable {
     public Collection<Cable> getConnectedCables() {
         return this.connectedCables;
     }
+    public Vector2 getCenter() {
+        return center;
+    }
 }

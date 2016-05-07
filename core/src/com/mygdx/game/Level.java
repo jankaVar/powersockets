@@ -60,4 +60,20 @@ public class Level {
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
 
+    public Collection<Cable> getCables() {
+        return cables;
+    }
+
+    public Collection<Socket> getSockets() {
+        return sockets;
+    }
+
+    public Collection<Generator> getGenerators() {
+        return generators;
+    }
+
+    public Collection<Switch> getSwitches() {
+        return switches;
+    }
+
 }
