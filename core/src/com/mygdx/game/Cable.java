@@ -43,6 +43,10 @@ public class Cable {
     public boolean isConnectedTo(Connectable connectable) {
         return this.connectables.contains(connectable);
     }
+
+    public Collection<LineSegment> getCableSegments() {
+        return cableSegments;
+    }
 }
 
 

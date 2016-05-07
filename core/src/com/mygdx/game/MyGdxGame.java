@@ -4,16 +4,22 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     SpriteBatch batch;
-    Texture socketImg;
-    Texture generatorImg;
+    Texture socketImg, generatorImg, pixelImg;
+    TextureRegion pixelReg;
+    Sprite pixelSprite;
     Level level;
     float red = 0.0f;
 
@@ -27,6 +33,15 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         this.batch = new SpriteBatch();
         this.socketImg = new Texture("socket.png");
         this.generatorImg = new Texture("generator.png");
+        this.pixelImg = new Texture("pixel.png");
+        this.pixelReg = new TextureRegion(
+                new Texture("pixel.png"),
+                0.0f, 0.0f, 1.0f, 1.0f
+        );
+        this.pixelSprite = new Sprite(
+                new Texture("pixel.png"),
+                0, 0, 1, 1
+        );
 
         Gdx.input.setInputProcessor(this);
 
@@ -51,7 +66,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         final int screenWidth = Gdx.graphics.getWidth();
         final int drawAreaSize = Math.min(screenHeight, screenWidth);
 
-        final float SOCKET_SIZE = 0.1f * drawAreaSize;
+        final float SOCKET_SIZE = 0.2f * drawAreaSize;
 
         //avoid stretching during window-resizes
         //TODO only do this on actual resize
@@ -64,30 +79,39 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         batch.begin();
 
+        for(Cable cable : this.level.getCables()) {
+            for(LineSegment line : cable.getCableSegments()) {
+                Utils.drawOrthagonalLine(
+                        batch,
+                        pixelImg,
+                        new Vector2(line.start).scl(drawAreaSize),
+                        new Vector2(line.end).scl(drawAreaSize),
+                        2.0f);
+            }
+
+        }
+
         for(Socket socket : this.level.getSockets()) {
             Vector2 center = socket.getCenter();
             batch.draw(
-                socketImg,
-                center.x * drawAreaSize - SOCKET_SIZE / 2,
-                center.y * drawAreaSize - SOCKET_SIZE / 2,
-                SOCKET_SIZE,
-                SOCKET_SIZE
+                    socketImg,
+                    center.x * drawAreaSize - SOCKET_SIZE / 2,
+                    center.y * drawAreaSize - SOCKET_SIZE / 2,
+                    SOCKET_SIZE,
+                    SOCKET_SIZE
             );
         }
         for(Generator generator : this.level.getGenerators()) {
             Vector2 center = generator.getCenter();
             batch.draw(
-                generatorImg,
-                center.x * drawAreaSize - SOCKET_SIZE / 2,
-                center.y * drawAreaSize - SOCKET_SIZE / 2,
-                SOCKET_SIZE,
-                SOCKET_SIZE
+                    generatorImg,
+                    center.x * drawAreaSize - SOCKET_SIZE / 2,
+                    center.y * drawAreaSize - SOCKET_SIZE / 2,
+                    SOCKET_SIZE,
+                    SOCKET_SIZE
             );
         }
 
-        //batch.draw(socketImg, 0.0f, 0.0f);
-        //batch.draw(socketImg, 0.0f, 0.0f, 100.0f, 100.0f);
-        //batch.draw(socketImg, 0.0f, 0.0f, SOCKET_SIZE, SOCKET_SIZE);
         batch.end();
     }
     /// </application-adapter>
