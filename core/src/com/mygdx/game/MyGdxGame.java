@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.HashSet;
+
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     SpriteBatch batch;
     Texture socketImg, generatorImg, pixelImg;
@@ -22,6 +24,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     Sprite pixelSprite;
     Level level;
     float red = 0.0f;
+    float green = 0.02734375f;
 
     public MyGdxGame() {
 
@@ -74,7 +77,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         matrix.setToOrtho2D(0, 0, screenWidth, screenHeight);
         batch.setProjectionMatrix(matrix);
 
-        Gdx.gl.glClearColor(this.red, 0.02734375f, 0.16796875f, 1.0f);
+        Gdx.gl.glClearColor(this.red, this.green, 0.16796875f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clears the screen
 
         batch.begin();
@@ -119,11 +122,44 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     /// <input-processor>
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
-        if(this.red > 0)
-            this.red = 0.0f;
-        else
-            this.red = 1.0f;
-        System.out.println("clicked");
+
+        //can be done better
+        final int screenHeight = Gdx.graphics.getHeight();
+        final int screenWidth = Gdx.graphics.getWidth();
+        final int drawAreaSize = Math.min(screenHeight, screenWidth);
+        ///
+
+        System.out.println();
+        System.out.println("new round");
+
+        for(Socket soc : level.getSockets()){
+
+            boolean socTouched = soc.socketTouched(new Vector2((float)x/drawAreaSize, (float)y/drawAreaSize), 0.2f);
+
+            //if the person touched the powered socket, it will vibrate
+            if (soc.isPowered() && socTouched){
+
+                System.out.println("right socket!");
+                this.red = 0.0f;
+                this.green = 1.0f;
+                return true; //lever accomplished!
+
+            } else if (!soc.isPowered() && socTouched){
+                //level accomplished
+                //Gdx.input.vibrate(new long[] { 0, 200, 200, 200}, -1); //or simply Gdx.input.vibrate(2000); to vibrate just for 2s
+                System.out.println("wrong socket!");
+                this.red = 1.0f;
+                this.green = 1.0f;
+                return true; //loose
+
+            } else {
+                //didn't touch the socket
+                System.out.println("no socket touched");
+                this.red = 0.0f;
+                this.green = 0.02734375f;
+            }
+        }
+
         return true;
     }
     @Override
