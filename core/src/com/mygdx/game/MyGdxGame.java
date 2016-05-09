@@ -134,17 +134,18 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         for(Socket soc : level.getSockets()){
 
-            boolean socTouched = soc.socketTouched(new Vector2((float)x/drawAreaSize, (float)y/drawAreaSize), 0.2f);
+            boolean socTouched = soc.socketTouched(new Vector2((float)x/drawAreaSize, (float)(1 - (float)y/drawAreaSize)), 0.2f);
 
             //if the person touched the powered socket, it will vibrate
-            if (soc.isPowered() && socTouched){
+            if (!soc.isPowered() && socTouched){
 
                 System.out.println("right socket!");
                 this.red = 0.0f;
                 this.green = 1.0f;
+                this.level = Level.generateLevel4();
                 return true; //lever accomplished!
 
-            } else if (!soc.isPowered() && socTouched){
+            } else if (soc.isPowered() && socTouched){
                 //level accomplished
                 //Gdx.input.vibrate(new long[] { 0, 200, 200, 200}, -1); //or simply Gdx.input.vibrate(2000); to vibrate just for 2s
                 System.out.println("wrong socket!");
