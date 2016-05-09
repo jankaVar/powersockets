@@ -1,11 +1,14 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by moru on 05/05/16.
  */
 public class Socket extends Connectable {
+
     //center: (x,y)
     //connectedCables: []
     public Socket(Vector2 center) {

@@ -2,20 +2,15 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Affine2;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.HashSet;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     SpriteBatch batch;
@@ -25,6 +20,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     Level level;
     float red = 0.0f;
     float green = 0.02734375f;
+
+    private Stage stage;
+    private Socket testSocket;
 
     public MyGdxGame() {
 
@@ -45,8 +43,17 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
                 new Texture("pixel.png"),
                 0, 0, 1, 1
         );
+        //Gdx.input.setInputProcessor(this);
 
-        Gdx.input.setInputProcessor(this);
+
+        stage = new Stage(new FitViewport(640, 640));
+        Gdx.input.setInputProcessor(stage);
+
+        /*TODO demo level for scene2d */
+        Socket testSocket = new Socket(new Vector2(0.5f, 0.5f));
+        testSocket.setPosition(0.5f, 0.5f);
+        this.testSocket = testSocket;
+        stage.addActor(testSocket);
 
         /*
         TODO use non-continuous rendering to save on battery:
@@ -62,9 +69,29 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         this.level = Level.generateLevel2();
     }
+    public void resize (int width, int height) {
+        /*
+         * Passing true when updating the viewport changes the camera position
+         * so it is centered on the stage, making 0,0 the bottom left corner.
+         */
+        stage.getViewport().update(width, height, true);
+    }
+
+    public void dispose() {
+        stage.dispose();
+    }
 
     @Override
-    public void render () {
+    public void render(){
+
+        Gdx.gl.glClearColor(this.red, this.green, 0.16796875f, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clears the screen
+
+        float delta = Gdx.graphics.getDeltaTime();
+        stage.act(delta);
+        stage.draw();
+
+        /*
         final int screenHeight = Gdx.graphics.getHeight();
         final int screenWidth = Gdx.graphics.getWidth();
         final int drawAreaSize = Math.min(screenHeight, screenWidth);
@@ -116,6 +143,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         }
 
         batch.end();
+        */
     }
     /// </application-adapter>
 
@@ -132,6 +160,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         System.out.println();
         System.out.println("new round");
 
+        System.out.println("Touch at: " + x + " " + y);
         for(Socket soc : level.getSockets()){
 
             boolean socTouched = soc.socketTouched(new Vector2((float)x/drawAreaSize, (float)(1 - (float)y/drawAreaSize)), 0.2f);
