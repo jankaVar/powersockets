@@ -147,6 +147,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
             } else if (!soc.isPowered() && socTouched){
                 //level accomplished
                 //Gdx.input.vibrate(new long[] { 0, 200, 200, 200}, -1); //or simply Gdx.input.vibrate(2000); to vibrate just for 2s
+                Gdx.input.vibrate(1300);
                 System.out.println("wrong socket!");
                 this.red = 1.0f;
                 this.green = 1.0f;
