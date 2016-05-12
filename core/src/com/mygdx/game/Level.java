@@ -25,116 +25,117 @@ public class Level {
         this.switches = new HashSet<Switch>();
     }
 
+    private static Generator[] addGenerators(Vector2[] generatorsPos){
+
+        Generator[] generators = new Generator[generatorsPos.length];
+        for (int i = 0; i < generatorsPos.length; i++){
+            generators[i] = new Generator(generatorsPos[i]);
+        }
+
+        return generators;
+    }
+
+    private static Socket[] addSockets(Vector2[] socketsPos){
+
+        Socket[] sockets = new Socket[socketsPos.length];
+        for (int i = 0; i < socketsPos.length; i++){
+            sockets[i] = new Socket(socketsPos[i]);
+        }
+
+        return sockets;
+    }
+
+    private static Cable[] addCables(int[] joints, float[][] xCoord, float[][] yCoord){
+
+        LineSegment[][] lines = new LineSegment[joints.length][];
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = new LineSegment[joints[i]];
+            for (int j = 0; j < lines[i].length; j++){
+                lines[i][j] = new LineSegment(new Vector2(xCoord[i][j], yCoord[i][j]), new Vector2(xCoord[i][j + 1], yCoord[i][j + 1]));
+            }
+        }
+
+        Cable[] cable = new Cable[lines.length];
+        for (int i = 0; i < cable.length; i++) {
+            cable[i] = new Cable(lines[i]);
+        }
+
+        return cable;
+    }
+
+    private static Level addToLevel(Socket[] sockets, Generator[] generators, Cable[] cables){
+
+        Level level = new Level();
+
+        for (Socket soc: sockets){
+            level.sockets.add(soc);
+        }
+
+        for (Generator gen: generators){
+            level.generators.add(gen);
+        }
+
+        for (Cable cab: cables) {
+            level.cables.add(cab);
+        }
+
+        return level;
+    }
 
     public static Level generateLevel2() {
         //two sockets, one connected to a generator
 
-        Vector2 generatorPos = new Vector2(0.25f, 0.25f);
-        Generator generator = new Generator(generatorPos);
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.25f, 0.25f)};
+        Generator[] generators = addGenerators(generatorsPos);
 
-        Vector2 connectedSocketPos = new Vector2(0.75f, 0.25f);
-        Socket connectedSocket = new Socket(connectedSocketPos);
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.75f, 0.25f), new Vector2(0.75f, 0.75f)};
+        Socket[] sockets = addSockets(socketsPos);
 
-        Vector2 safeSocketPos = new Vector2(0.75f, 0.75f);
-        Socket safeSocket = new Socket(safeSocketPos);
+        //lines made into cables
+        int[] joints = {1};
+        float[][] xCoord = {{0.25f, 0.75f}};
+        float[][] yCoord = {{0.25f, 0.25f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
 
+        //could be done nicer too, but nothing comes to my mind now
+        cables[0].connectTo(sockets[0]);
+        cables[0].connectTo(generators[0]);
 
-        LineSegment straightCable = new LineSegment(generatorPos, connectedSocketPos);
-        Cable cable = new Cable(straightCable);
-        cable.connectTo(generator);
-        cable.connectTo(connectedSocket);
-
-
-        Level level = new Level();
-        level.sockets.add(safeSocket);
-        level.sockets.add(connectedSocket);
-        level.generators.add(generator);
-        level.cables.add(cable);
-
-
-        System.out.println("Is safe socket powered? " + safeSocket.isPowered());
-        System.out.println("Is dangerous socket powered? " + connectedSocket.isPowered());
-
-        return level;
+        //returns Level
+        return addToLevel(sockets, generators, cables);
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
 
     public static Level generateLevel4() {
-        //three sockets, two generators
-        ///redoit!!!!!
+        //three sockets, two generators!
 
-        Vector2 generatorPos = new Vector2(0.20f, 0.80f);
-        Generator generator = new Generator(generatorPos);
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.15f, 0.85f), new Vector2(0.7f, 0.5f)};
+        Generator[] generators = addGenerators(generatorsPos);
 
-        Vector2 generatorPos2 = new Vector2(0.80f, 0.60f);
-        Generator generator2 = new Generator(generatorPos2);
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.20f, 0.20f), new Vector2(0.45f, 0.20f), new Vector2(0.80f, 0.20f)};
+        Socket[] sockets = addSockets(socketsPos);
 
-        Vector2 safeSocketPos = new Vector2(0.20f, 0.20f);
-        Socket safeSocket = new Socket(safeSocketPos);
+        //lines made into cables
+        int[] joints = {5, 6, 6};
+        float[][] xCoord = {{0.20f, 0.20f, 0.90f, 0.90f, 0.60f, 0.60f}, {0.45f, 0.45f, 0.25f, 0.25f, 0.40f, 0.40f, 0.70f}, {0.80f, 0.80f, 0.15f, 0.15f, 0.70f, 0.70f, 0.15f}};
+        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.70f, 0.70f, 0.20f}, {0.20f, 0.45f, 0.45f, 0.70f, 0.70f, 0.50f, 0.50f}, {0.20f, 0.40f, 0.40f, 0.65f, 0.65f, 0.85f, 0.85f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
 
-        Vector2 connectedSocketPos = new Vector2(0.40f, 0.20f);
-        Socket connectedSocket = new Socket(connectedSocketPos);
+        //could be done nicer too, but nothing comes to my mind now
+        cables[0].connectTo(sockets[0]);
+        cables[1].connectTo(sockets[1]);
+        cables[1].connectTo(generators[1]);
+        cables[2].connectTo(sockets[2]);
+        cables[2].connectTo(generators[0]);
 
-        Vector2 connectedSocketPos2 = new Vector2(0.80f, 0.20f);
-        Socket connectedSocket2 = new Socket(connectedSocketPos2);
+        //returns Level
+        return addToLevel(sockets, generators, cables);
 
-
-        //final int sockets = 3;
-
-        LineSegment[] lines1 = new LineSegment[5];
-
-        lines1[0] = new LineSegment(safeSocketPos, new Vector2(safeSocketPos.x, safeSocketPos.y + 0.20f));
-        lines1[1] = new LineSegment(new Vector2(safeSocketPos.x, safeSocketPos.y + 0.20f), new Vector2(safeSocketPos.x + 0.8f, safeSocketPos.y + 0.20f));
-        lines1[2] = new LineSegment(new Vector2(safeSocketPos.x + 0.8f, safeSocketPos.y + 0.20f), new Vector2(safeSocketPos.x + 0.8f, safeSocketPos.y + 0.60f));
-        lines1[3] = new LineSegment(new Vector2(safeSocketPos.x + 0.8f, safeSocketPos.y + 0.60f), new Vector2(safeSocketPos.x + 0.4f, safeSocketPos.y + 0.60f));
-        lines1[4] = new LineSegment(new Vector2(safeSocketPos.x + 0.4f, safeSocketPos.y + 0.60f), new Vector2(safeSocketPos.x + 0.4f, safeSocketPos.y));
-
-        Cable cable1 = new Cable(lines1);
-        cable1.connectTo(safeSocket);
-
-        LineSegment[] lines2 = new LineSegment[6];
-
-        lines2[0] = new LineSegment(generatorPos, new Vector2(generatorPos.x + 0.40f, generatorPos.y));
-        lines2[1] = new LineSegment(new Vector2(generatorPos.x + 0.40f, generatorPos.y), new Vector2(generatorPos.x + 0.4f, generatorPos.y - 0.20f));
-        lines2[2] = new LineSegment(new Vector2(generatorPos.x + 0.4f, generatorPos.y - 0.20f), new Vector2(generatorPos.x , generatorPos.y - 0.20f));
-        lines2[3] = new LineSegment(new Vector2(generatorPos.x, generatorPos.y - 0.20f), new Vector2(generatorPos.x, generatorPos.y - 0.50f));
-        lines2[4] = new LineSegment(new Vector2(generatorPos.x, generatorPos.y - 0.50f), new Vector2(generatorPos.x + 0.6f, generatorPos.y - 0.50f));
-        lines2[5] = new LineSegment(new Vector2(generatorPos.x + 0.6f, generatorPos.y - 0.50f), connectedSocketPos2);
-
-        Cable cable2 = new Cable(lines2);
-        cable2.connectTo(connectedSocket);
-        cable2.connectTo(generator);
-
-        LineSegment[] lines3 = new LineSegment[4];
-
-        lines3[0] = new LineSegment(generatorPos2, new Vector2(generatorPos2.x - 0.20f, generatorPos2.y));
-        lines3[1] = new LineSegment(new Vector2(generatorPos2.x - 0.20f, generatorPos2.y), new Vector2(generatorPos2.x - 0.2f, generatorPos2.y - 0.2f));
-        lines3[2] = new LineSegment(new Vector2(generatorPos2.x - 0.2f, generatorPos2.y - 0.2f), new Vector2(generatorPos2.x - 0.20f, generatorPos2.y - 0.40f));
-        lines3[3] = new LineSegment(new Vector2(generatorPos2.x - 0.2f, generatorPos2.y - 0.40f), connectedSocketPos);
-
-        Cable cable3 = new Cable(lines3);
-        cable3.connectTo(connectedSocket2);
-        cable3.connectTo(generator2);
-
-        Level level = new Level();
-        level.sockets.add(safeSocket);
-        level.sockets.add(connectedSocket);
-        level.sockets.add(connectedSocket2);
-        level.generators.add(generator);
-        level.generators.add(generator2);
-        level.cables.add(cable1);
-        level.cables.add(cable2);
-        level.cables.add(cable3);
-
-
-        System.out.println("Is safe socket powered? " + safeSocket.isPowered());
-        System.out.println("Is dangerous socket powered? " + connectedSocket.isPowered());
-        System.out.println("Is dangerous socket2 powered? " + connectedSocket2.isPowered());
-
-        return level;
-
-        //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
 
     public Collection<Cable> getCables() {
