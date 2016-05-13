@@ -23,6 +23,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     TextureRegion pixelReg;
     Sprite pixelSprite;
     Level level;
+    int levelNumber = 1;
     float red = 0.0f;
     float green = 0.02734375f;
 
@@ -60,7 +61,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         */
 
-        this.level = Level.generateLevel2();
+        this.level = Level.generateLevel(levelNumber);
     }
 
     @Override
@@ -142,7 +143,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
                 System.out.println("right socket!");
                 this.red = 0.0f;
                 this.green = 1.0f;
-                this.level = Level.generateLevel4();
+                levelNumber++;
+                this.level = Level.generateLevel(levelNumber);
                 return true; //lever accomplished!
 
             } else if (soc.isPowered() && socTouched){

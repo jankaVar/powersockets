@@ -25,6 +25,30 @@ public class Level {
         this.switches = new HashSet<Switch>();
     }
 
+    //all levels
+    public static Level generateLevel(int levelNumer){
+        Level levelGen;
+
+        switch (levelNumer) {
+            case 1:  levelGen = generateLevel1();
+                break;
+            case 2:  levelGen = generateLevel2();
+                break;
+            case 3:  levelGen = generateLevel3();
+                break;
+            case 4:  levelGen = generateLevel4();
+                break;
+            case 5:  levelGen = generateLevel5();
+                break;
+            default: levelGen = generateLevel2();
+                System.out.println("out of levels");
+                break;
+        }
+
+        return levelGen;
+
+    }
+
     private static Generator[] addGenerators(Vector2[] generatorsPos){
 
         Generator[] generators = new Generator[generatorsPos.length];
@@ -82,26 +106,77 @@ public class Level {
         return level;
     }
 
+    public static Level generateLevel1() {
+        //two sockets, one connected to a generator
+
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.50f, 0.75f)};
+        Generator[] generators = addGenerators(generatorsPos);
+
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.50f, 0.25f)};
+        Socket[] sockets = addSockets(socketsPos);
+
+        //lines made into cables
+        int[] joints = {};
+        float[][] xCoord = {{}};
+        float[][] yCoord = {{}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
+
+        //returns Level
+        return addToLevel(sockets, generators, cables);
+
+        //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
+    }
+
     public static Level generateLevel2() {
         //two sockets, one connected to a generator
 
         //generators
-        Vector2[] generatorsPos = {new Vector2(0.25f, 0.25f)};
+        Vector2[] generatorsPos = {new Vector2(0.25f, 0.75f)};
         Generator[] generators = addGenerators(generatorsPos);
 
         //sockets
-        Vector2[] socketsPos = {new Vector2(0.75f, 0.25f), new Vector2(0.75f, 0.75f)};
+        Vector2[] socketsPos = {new Vector2(0.25f, 0.25f), new Vector2(0.75f, 0.25f)};
         Socket[] sockets = addSockets(socketsPos);
 
         //lines made into cables
         int[] joints = {1};
-        float[][] xCoord = {{0.25f, 0.75f}};
-        float[][] yCoord = {{0.25f, 0.25f}};
+        float[][] xCoord = {{0.25f, 0.25f}};
+        float[][] yCoord = {{0.25f, 0.75f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //could be done nicer too, but nothing comes to my mind now
         cables[0].connectTo(sockets[0]);
         cables[0].connectTo(generators[0]);
+
+        //returns Level
+        return addToLevel(sockets, generators, cables);
+
+        //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
+    }
+
+    public static Level generateLevel3() {
+        //two sockets, one connected to a generator
+
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.50f, 0.75f)};
+        Generator[] generators = addGenerators(generatorsPos);
+
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.25f, 0.20f), new Vector2(0.75f, 0.20f)};
+        Socket[] sockets = addSockets(socketsPos);
+
+        //lines made into cables
+        int[] joints = {3, 3};
+        float[][] xCoord = {{0.25f, 0.25f, 0.75f, 0.75f}, {0.75f, 0.75f, 0.50f, 0.50f}};
+        float[][] yCoord = {{0.20f, 0.50f, 0.50f, 0.75f}, {0.20f, 0.35f, 0.35f, 0.75f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
+
+        //could be done nicer too, but nothing comes to my mind now
+        cables[0].connectTo(sockets[0]);
+        cables[1].connectTo(sockets[1]);
+        cables[1].connectTo(generators[0]);
 
         //returns Level
         return addToLevel(sockets, generators, cables);
@@ -132,6 +207,35 @@ public class Level {
         cables[1].connectTo(generators[1]);
         cables[2].connectTo(sockets[2]);
         cables[2].connectTo(generators[0]);
+
+        //returns Level
+        return addToLevel(sockets, generators, cables);
+
+    }
+
+    public static Level generateLevel5() {
+        //three sockets, two generators!
+
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.35f, 0.75f), new Vector2(0.65f, 0.75f)};
+        Generator[] generators = addGenerators(generatorsPos);
+
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.20f, 0.20f), new Vector2(0.50f, 0.20f), new Vector2(0.80f, 0.20f)};
+        Socket[] sockets = addSockets(socketsPos);
+
+        //lines made into cables
+        int[] joints = {5, 3, 5};
+        float[][] xCoord = {{0.20f, 0.20f, 0.95f, 0.95f, 0.35f, 0.35f}, {0.50f, 0.50f, 0.85f, 0.85f}, {0.80f, 0.80f, 0.15f, 0.15f, 0.65f, 0.65f}};
+        float[][] yCoord = {{0.20f, 0.40f, 0.40f, 0.60f, 0.60f, 0.75f}, {0.20f, 0.50f, 0.50f, 0.75f}, {0.20f, 0.35f, 0.35f, 0.90f, 0.90f, 0.75f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
+
+        //could be done nicer too, but nothing comes to my mind now
+        cables[0].connectTo(sockets[0]);
+        cables[0].connectTo(generators[0]);
+        cables[1].connectTo(sockets[1]);
+        cables[2].connectTo(sockets[2]);
+        cables[2].connectTo(generators[1]);
 
         //returns Level
         return addToLevel(sockets, generators, cables);
