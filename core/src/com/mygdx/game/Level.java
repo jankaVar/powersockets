@@ -24,6 +24,21 @@ public class Level {
         this.generators = new HashSet<Generator>();
         this.switches = new HashSet<Switch>();
     }
+    public Level(Socket[] sockets, Generator[] generators, Cable[] cables){
+        this();
+
+        for (Socket soc: sockets){
+            this.sockets.add(soc);
+        }
+
+        for (Generator gen: generators){
+            this.generators.add(gen);
+        }
+
+        for (Cable cab: cables) {
+            this.cables.add(cab);
+        }
+    }
 
     //all levels
     public static Level generateLevel(int levelNumer){
@@ -87,25 +102,6 @@ public class Level {
         return cable;
     }
 
-    private static Level addToLevel(Socket[] sockets, Generator[] generators, Cable[] cables){
-
-        Level level = new Level();
-
-        for (Socket soc: sockets){
-            level.sockets.add(soc);
-        }
-
-        for (Generator gen: generators){
-            level.generators.add(gen);
-        }
-
-        for (Cable cab: cables) {
-            level.cables.add(cab);
-        }
-
-        return level;
-    }
-
     public static Level generateLevel1() {
         //two sockets, one connected to a generator
 
@@ -124,7 +120,7 @@ public class Level {
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //returns Level
-        return addToLevel(sockets, generators, cables);
+        return new Level(sockets, generators, cables);
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -151,7 +147,7 @@ public class Level {
         cables[0].connectTo(generators[0]);
 
         //returns Level
-        return addToLevel(sockets, generators, cables);
+        return new Level(sockets, generators, cables);
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -179,7 +175,7 @@ public class Level {
         cables[1].connectTo(generators[0]);
 
         //returns Level
-        return addToLevel(sockets, generators, cables);
+        return new Level(sockets, generators, cables);
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -209,7 +205,7 @@ public class Level {
         cables[2].connectTo(generators[0]);
 
         //returns Level
-        return addToLevel(sockets, generators, cables);
+        return new Level(sockets, generators, cables);
 
     }
 
@@ -238,7 +234,7 @@ public class Level {
         cables[2].connectTo(generators[1]);
 
         //returns Level
-        return addToLevel(sockets, generators, cables);
+        return new Level(sockets, generators, cables);
 
     }
 
