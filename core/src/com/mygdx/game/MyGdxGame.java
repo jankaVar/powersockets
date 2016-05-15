@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,14 +9,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.HashSet;
-
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
+
+    private final static float DEFAULT_GREEN = 0.02734375f;
+    private final static float DEFAULT_BLUE = 0.16796875f;
+    private final static Color DEFAULT_BG = new Color(0.0f, DEFAULT_GREEN, DEFAULT_BLUE, 1.0f);
+    private final static Color ELECTROCUTED_BG = new Color(1.0f, 1.0f, DEFAULT_BLUE, 1.0f);
+    private final static Color SUCCESS_BG = new Color(0.0f, 1.0f, DEFAULT_BLUE, 1.0f);
+    private final static int SUCCESS_ANIMATION_DURATION = 1000; //in ms
+    private final static int FAILURE_ANIMATION_DURATION = 1300; //in ms
+
+
     SpriteBatch batch;
     Texture socketImg, generatorImg, pixelImg;
     TextureRegion pixelReg;
@@ -26,6 +31,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     int levelNumber = 1;
     float red = 0.0f;
     float green = 0.02734375f;
+    private long timeOfSuccess = -1;
+    private long timeOfFailure = -1;
+    private Color bgColor = DEFAULT_BG;
+
 
     public MyGdxGame() {
 
@@ -66,6 +75,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void render () {
+        this.update();
+
         final int screenHeight = Gdx.graphics.getHeight();
         final int screenWidth = Gdx.graphics.getWidth();
         final int drawAreaSize = Math.min(screenHeight, screenWidth);
@@ -78,7 +89,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         matrix.setToOrtho2D(0, 0, screenWidth, screenHeight);
         batch.setProjectionMatrix(matrix);
 
-        Gdx.gl.glClearColor(this.red, this.green, 0.16796875f, 1.0f);
+        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clears the screen
 
         batch.begin();
@@ -120,6 +131,22 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     }
     /// </application-adapter>
 
+    public void update() {
+        if(this.timeOfSuccess > 0 &&
+                (System.currentTimeMillis() - this.timeOfSuccess) > SUCCESS_ANIMATION_DURATION ) {
+            //reset background after success-"animation"
+            this.timeOfSuccess = -1;
+            this.bgColor = DEFAULT_BG;
+            levelNumber++;
+            this.level = Level.generateLevel(levelNumber);
+        }
+        if(this.timeOfFailure > 0 &&
+                (System.currentTimeMillis() - this.timeOfFailure) > FAILURE_ANIMATION_DURATION ) {
+            this.timeOfFailure = -1;
+            this.bgColor = DEFAULT_BG;
+        }
+    }
+
     /// <input-processor>
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
@@ -140,31 +167,37 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
             //if the person touched the powered socket, it will vibrate
             if (!soc.isPowered() && socTouched){
 
-                System.out.println("right socket!");
-                this.red = 0.0f;
-                this.green = 1.0f;
-                levelNumber++;
-                this.level = Level.generateLevel(levelNumber);
+                this.success();
                 return true; //lever accomplished!
 
             } else if (soc.isPowered() && socTouched){
-                //level accomplished
-                //Gdx.input.vibrate(new long[] { 0, 200, 200, 200}, -1); //or simply Gdx.input.vibrate(2000); to vibrate just for 2s
-                Gdx.input.vibrate(1300);
-                System.out.println("wrong socket!");
-                this.red = 1.0f;
-                this.green = 1.0f;
+                this.failure();
                 return true; //loose
 
             } else {
                 //didn't touch the socket
                 System.out.println("no socket touched");
-                this.red = 0.0f;
-                this.green = 0.02734375f;
+                this.bgColor = DEFAULT_BG;
             }
         }
 
         return true;
+    }
+
+    public void success() {
+        System.out.println("right socket!");
+        this.bgColor = SUCCESS_BG;
+        this.timeOfSuccess = System.currentTimeMillis();
+        //levelNumber++;
+        //this.level = Level.generateLevel(levelNumber);
+    }
+    public void failure() {
+        //level accomplished
+        //Gdx.input.vibrate(new long[] { 0, 200, 200, 200}, -1); //or simply Gdx.input.vibrate(2000); to vibrate just for 2s
+        System.out.println("wrong socket!");
+        Gdx.input.vibrate(FAILURE_ANIMATION_DURATION);
+        this.timeOfFailure = System.currentTimeMillis();
+        this.bgColor = ELECTROCUTED_BG;
     }
     @Override
     public boolean keyDown (int keycode) { return false; }
