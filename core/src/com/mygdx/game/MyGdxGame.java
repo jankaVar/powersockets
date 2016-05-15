@@ -37,6 +37,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private long timeOfFailure = -1;
     private Color bgColor = DEFAULT_BG;
     private float percentageTimeRemaining = 1.0f;
+    private boolean timoutVibrationStarted = false;
 
 
     public MyGdxGame() {
@@ -156,6 +157,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
             this.timeOfFailure = -1;
             this.level.reset();
         } else if(isAfterTimeout()) {
+            this.timoutVibrationStarted = false;
             this.level.reset();
         }
 
@@ -166,6 +168,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
             this.bgColor = ELECTROCUTED_BG;
 
         } else if (inTimeoutAnimation()) {
+            if(!this.timoutVibrationStarted) {
+                this.timoutVibrationStarted = true;
+                Gdx.input.vibrate(new long[] { 0, 300, 300, 300, 300, 300}, -1);
+            }
             this.bgColor = TIMEOUT_BG;
             this.percentageTimeRemaining = 1.0f -
                     (System.currentTimeMillis() - level.startTime - level.maxTime) * 1.0f /
