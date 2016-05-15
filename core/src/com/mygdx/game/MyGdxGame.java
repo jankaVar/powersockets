@@ -19,8 +19,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private final static Color DEFAULT_BG = new Color(0.0f, DEFAULT_GREEN, DEFAULT_BLUE, 1.0f);
     private final static Color ELECTROCUTED_BG = new Color(1.0f, 1.0f, DEFAULT_BLUE, 1.0f);
     private final static Color SUCCESS_BG = new Color(0.0f, 1.0f, DEFAULT_BLUE, 1.0f);
+    private final static Color TIMEOUT_BG = new Color(1.0f, 0.0f, DEFAULT_BLUE, 1.0f);
     private final static int SUCCESS_ANIMATION_DURATION = 1000; //in ms
     private final static int FAILURE_ANIMATION_DURATION = 1300; //in ms
+    private final static int TIMEOUT_ANIMATION_DURATION = 5000; //in ms
 
 
     SpriteBatch batch;
@@ -34,6 +36,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private long timeOfSuccess = -1;
     private long timeOfFailure = -1;
     private Color bgColor = DEFAULT_BG;
+    private float percentageTimeRemaining = 1.0f;
 
 
     public MyGdxGame() {
@@ -94,6 +97,15 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         batch.begin();
 
+        //draw timeslider for remaining time
+        Utils.drawOrthagonalLine(
+                batch,
+                pixelImg,
+                new Vector2(0.0f, 0.0f).scl(drawAreaSize),
+                new Vector2(percentageTimeRemaining, 0.0f).scl(drawAreaSize),
+                10.0f
+        );
+
         for(Cable cable : this.level.getCables()) {
             for(LineSegment line : cable.getCableSegments()) {
                 Utils.drawOrthagonalLine(
@@ -132,24 +144,76 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     /// </application-adapter>
 
     public void update() {
-        if(this.timeOfSuccess > 0 &&
-                (System.currentTimeMillis() - this.timeOfSuccess) > SUCCESS_ANIMATION_DURATION ) {
-            //reset background after success-"animation"
+
+        if(isAfterSuccess()){
+            //success animation has just finished
             this.timeOfSuccess = -1;
-            this.bgColor = DEFAULT_BG;
-            levelNumber++;
+            this.levelNumber++;
             this.level = Level.generateLevel(levelNumber);
-        }
-        if(this.timeOfFailure > 0 &&
-                (System.currentTimeMillis() - this.timeOfFailure) > FAILURE_ANIMATION_DURATION ) {
+
+        } else if(isAfterFailure()) {
+            //failure animation has just finished
             this.timeOfFailure = -1;
-            this.bgColor = DEFAULT_BG;
+            this.level.reset();
+        } else if(isAfterTimeout()) {
+            this.level.reset();
         }
+
+        if(inSuccessAnimation()) {
+            this.bgColor = SUCCESS_BG;
+
+        } else if (inDefeatAnimation()) {
+            this.bgColor = ELECTROCUTED_BG;
+
+        } else if (inTimeoutAnimation()) {
+            this.bgColor = TIMEOUT_BG;
+            this.percentageTimeRemaining = 1.0f -
+                    (System.currentTimeMillis() - level.startTime - level.maxTime) * 1.0f /
+                            TIMEOUT_ANIMATION_DURATION;
+
+        } else {
+            this.bgColor = DEFAULT_BG;
+            this.percentageTimeRemaining = 1.0f - (System.currentTimeMillis() - level.startTime) * 1.0f / level.maxTime;
+        }
+    }
+
+
+    private boolean inSuccessAnimation() {
+        return this.timeOfSuccess > 0 &&
+                (System.currentTimeMillis() - this.timeOfSuccess) <= SUCCESS_ANIMATION_DURATION;
+
+    }
+    private boolean isAfterSuccess() {
+       return this.timeOfSuccess > 0 &&
+               (System.currentTimeMillis() - this.timeOfSuccess) > SUCCESS_ANIMATION_DURATION;
+    }
+
+
+    private boolean isAfterFailure() {
+        return this.timeOfFailure > 0 &&
+                (System.currentTimeMillis() - this.timeOfFailure) > FAILURE_ANIMATION_DURATION;
+    }
+    private boolean inDefeatAnimation() {
+        return this.timeOfFailure > 0 &&
+                (System.currentTimeMillis() - this.timeOfFailure) <= FAILURE_ANIMATION_DURATION;
+    }
+
+
+    private boolean inTimeoutAnimation() {
+        return System.currentTimeMillis() > level.startTime + level.maxTime;
+    }
+    private boolean isAfterTimeout() {
+        return System.currentTimeMillis() > level.startTime + level.maxTime + TIMEOUT_ANIMATION_DURATION;
     }
 
     /// <input-processor>
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
+
+        //while success or defeat are playing, we shouldn't take inputs
+        if(inSuccessAnimation() || inDefeatAnimation() || inTimeoutAnimation()) {
+            return true;
+        }
 
         //can be done better
         final int screenHeight = Gdx.graphics.getHeight();
