@@ -95,8 +95,12 @@ public class Level {
     private static Cable[] addCables(int[] joints, float[][] xCoord, float[][] yCoord){
 
         LineSegment[][] lines = new LineSegment[joints.length][];
+
+    private static Cable[] addCables(int[] nrOfLineSegments, float[][] xCoord, float[][] yCoord){
+
+        LineSegment[][] lines = new LineSegment[nrOfLineSegments.length][];
         for (int i = 0; i < lines.length; i++) {
-            lines[i] = new LineSegment[joints[i]];
+            lines[i] = new LineSegment[nrOfLineSegments[i]];
             for (int j = 0; j < lines[i].length; j++){
                 lines[i][j] = new LineSegment(new Vector2(xCoord[i][j], yCoord[i][j]), new Vector2(xCoord[i][j + 1], yCoord[i][j + 1]));
             }
