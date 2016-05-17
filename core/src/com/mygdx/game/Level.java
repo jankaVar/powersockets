@@ -132,17 +132,46 @@ public class Level {
         return cable;
     }
 
+    public static Level generateLevel1() { //TODO for debugging, replace with original level1
+        //two sockets, one connected to a generator
+
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.25f, 0.5f)};
+        Generator[] generators = addGenerators(generatorsPos);
+
+        //switches
+        Vector2[] switchesPos = {new Vector2(0.5f, 0.5f)};
+        Switch[] switches = addSwitches(switchesPos);
+
+
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.50f, 0.25f)};
+        Socket[] sockets = addSockets(socketsPos);
+
+        //lines made into cables
+        int[] joints = {1, 1};
+        float[][] xCoord = {{0.25f, 0.50f}, {0.50f, 0.50f}};
+        float[][] yCoord = {{0.50f, 0.50f}, {0.50f, 0.25f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
+
+        //returns Level
+        return new Level(sockets, generators, switches, cables, 5000);
+
+        //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
+    }
+    /*
     public static Level generateLevel1() {
         //two sockets, one connected to a generator
 
         //generators
-        //Vector2[] generatorsPos = {new Vector2(0.50f, 0.75f)};
-        //Generator[] generators = addGenerators(generatorsPos);
         Generator[] generators = {};
 
         //sockets
         Vector2[] socketsPos = {new Vector2(0.50f, 0.50f)};
         Socket[] sockets = addSockets(socketsPos);
+
+        Vector2[] switchesPos = {new Vector2(0.1f, 0.1f)};
+        Switch[] switches = addSwitches(switchesPos);
 
         //lines made into cables
         int[] joints = {};
@@ -151,10 +180,11 @@ public class Level {
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000);
+        return new Level(sockets, generators, switches, cables, 5000);
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
+    */
 
     public static Level generateLevel2() {
         //two sockets, one connected to a generator
