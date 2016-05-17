@@ -8,10 +8,12 @@ import java.util.HashSet;
  */
 public class Cable {
     private Collection<Connectable> connectables;
+    private Collection<Switch> switches;
     private Collection<LineSegment> cableSegments;
 
     public Cable(LineSegment...segments){
         this.connectables = new HashSet<Connectable>();
+        this.switches = new HashSet<Switch>();
         this.cableSegments = new HashSet<LineSegment>();
         for(LineSegment s : segments) {
             this.cableSegments.add(s);
@@ -24,6 +26,12 @@ public class Cable {
             connectable.connectTo(this);
         }
     }
+    public void connectTo(Switch sw, Short onSideXOfSwitch){
+        this.switches.add(sw);
+        if(!sw.isConnectedTo(this)) {
+            sw.connectTo(this, onSideXOfSwitch);
+        }
+    }
 
     /*
      * returns true if any of the attached connectables is a generator
@@ -33,7 +41,10 @@ public class Cable {
         for(Connectable c : connectables) {
             if(c instanceof Generator) {
                 return true;
-            } else if (c instanceof Switch && ((Switch)c).directsPowerTo(this)) {
+            }
+        }
+        for(Switch sw : switches) {
+            if(sw.directsPowerTo(this)) {
                 return true;
             }
         }
@@ -42,6 +53,9 @@ public class Cable {
 
     public boolean isConnectedTo(Connectable connectable) {
         return this.connectables.contains(connectable);
+    }
+    public boolean isConnectedTo(Switch sw) {
+        return this.switches.contains(sw);
     }
 
     public Collection<LineSegment> getCableSegments() {
