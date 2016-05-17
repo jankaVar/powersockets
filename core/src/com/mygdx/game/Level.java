@@ -29,12 +29,16 @@ public class Level {
         this.startTime = System.currentTimeMillis();
         this.maxTime = time;
     }
-    public Level(Socket[] sockets, Generator[] generators, Cable[] cables, long time){
+    public Level(Socket[] sockets, long time){
         this(time);
 
         for (Socket soc: sockets){
             this.sockets.add(soc);
         }
+
+    }
+    public Level(Socket[] sockets, Generator[] generators, Cable[] cables, long time){
+        this(sockets, time);
 
         for (Generator gen: generators){
             this.generators.add(gen);
@@ -44,6 +48,14 @@ public class Level {
             this.cables.add(cab);
         }
     }
+    public Level(Socket[] sockets, Generator[] generators, Switch[] switches, Cable[] cables, long time){
+        this(sockets, generators, cables, time);
+
+        for(Switch s : switches) {
+            this.switches.add(s);
+        }
+    }
+
     public void reset() {
         this.startTime = System.currentTimeMillis();
     }
@@ -92,9 +104,15 @@ public class Level {
         return sockets;
     }
 
-    private static Cable[] addCables(int[] joints, float[][] xCoord, float[][] yCoord){
+    private static Switch[] addSwitches(Vector2[] switchesPos){
 
-        LineSegment[][] lines = new LineSegment[joints.length][];
+        Switch[] switches = new Switch[switchesPos.length];
+        for (int i = 0; i < switchesPos.length; i++){
+            switches[i] = new Switch(switchesPos[i]);
+        }
+
+        return switches;
+    }
 
     private static Cable[] addCables(int[] nrOfLineSegments, float[][] xCoord, float[][] yCoord){
 

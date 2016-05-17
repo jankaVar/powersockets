@@ -26,7 +26,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
 
     SpriteBatch batch;
-    Texture socketImg, generatorImg, pixelImg;
+    Texture socketImg, generatorImg, switchImg, pixelImg;
     TextureRegion pixelReg;
     Sprite pixelSprite;
     Level level;
@@ -50,6 +50,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         this.batch = new SpriteBatch();
         this.socketImg = new Texture("socket.png");
         this.generatorImg = new Texture("generator.png");
+        this.switchImg = new Texture("switch_top_to_left.png");
         this.pixelImg = new Texture("pixel.png");
         this.pixelReg = new TextureRegion(
                 new Texture("pixel.png"),
@@ -139,6 +140,16 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
                     SOCKET_SIZE
             );
         }
+        for(Switch sw : this.level.getSwitches()) {
+            Vector2 center = sw.getCenter();
+            batch.draw(
+                    switchImg,
+                    center.x * drawAreaSize - SOCKET_SIZE / 2,
+                    center.y * drawAreaSize - SOCKET_SIZE / 2,
+                    SOCKET_SIZE,
+                    SOCKET_SIZE
+            );
+    }
 
         batch.end();
     }
