@@ -15,25 +15,25 @@ public class Utils {
 
     public static void drawOrthagonalLine(SpriteBatch batch, Texture pixelImg, Vector2 start, Vector2 end, float width) {
         Vector2 diff = new Vector2(end).sub(start);
-        Side direction;
+        Direction direction;
         if(Math.abs(diff.x) > Math.abs(diff.y)) {
-            direction =  diff.x > 0 ? Side.RIGHT : Side.LEFT;
+            direction =  diff.x > 0 ? Direction.RIGHT : Direction.LEFT;
         } else {
-            direction =  diff.y > 0 ? Side.TOP : Side.BOTTOM;
+            direction =  diff.y > 0 ? Direction.UP : Direction.DOWN;
         }
         float length = Math.max(Math.abs(diff.x), Math.abs(diff.y));
 
         drawOrthagonalLine(batch, pixelImg, start, direction, length, width);
     }
 
-    public static void drawOrthagonalLine(SpriteBatch batch, Texture pixelImg, Vector2 start, Side direction, float length, float width) {
-        if(direction == Side.TOP) {
+    public static void drawOrthagonalLine(SpriteBatch batch, Texture pixelImg, Vector2 start, Direction direction, float length, float width) {
+        if(direction == Direction.UP) {
             batch.draw(pixelImg, start.x, start.y, width, length);
-        } else if(direction == Side.BOTTOM) {
+        } else if(direction == Direction.DOWN) {
             batch.draw(pixelImg, start.x, start.y, width, -length);
-        } else if(direction == Side.RIGHT) {
+        } else if(direction == Direction.RIGHT) {
             batch.draw(pixelImg, start.x, start.y, length, width);
-        } else if(direction == Side.LEFT) {
+        } else if(direction == Direction.LEFT) {
             batch.draw(pixelImg, start.x, start.y, -length, width);
         }
     }

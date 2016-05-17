@@ -10,17 +10,33 @@ import java.util.*;
 public class Switch {
     private final Vector2 center;
     private final Collection<Cable> connectedCables;
-    private final Map<Short, Set<Short>> connectionMappings;
-    private final Map<Cable, Short> cable2side;
-    private final Map<Short, Cable> side2cable;
+
+    /**
+     * @deprecated
+     */
+    private final Map<Integer, Set<Integer>> connectionMappingsDepr;
+    private final int[][] connectionMappings;
+    private final Map<Cable, Integer> cable2side;
+    /**
+     * @deprecated
+     */
+    private final Map<Integer, Cable> side2cableDepr;
+
+    private final Cable[] side2cable = new Cable[4];
 
     /**
      * mappings when the screen isn't rotated. use this for level setup.
      */
-    public final static Short TOP = 0, LEFT = 1, BOTTOM = 2, RIGHT = 3;
+    public final static int TOP = 0, LEFT = 1, BOTTOM = 2, RIGHT = 3;
 
 
-    public static Short upIs = TOP; //Short.TOP;
+    private static int upIs = TOP; //Short.TOP;
+    public static void setUpIs(int upIs) {
+        Switch.upIs = upIs % 4;
+    }
+    public static int getUpIs() {
+        return upIs;
+    }
 
     /**
      * @deprecated
@@ -29,9 +45,10 @@ public class Switch {
     public Switch(Vector2 center) {
         this.center = center;
         this.connectedCables = new HashSet<Cable>();
-        this.connectionMappings = new HashMap<Short, Set<Short>>();
-        this.cable2side = new HashMap<Cable, Short>();
-        this.side2cable = new HashMap<Short, Cable>();
+        this.connectionMappingsDepr = new HashMap<Integer, Set<Integer>>();
+        this.cable2side = new HashMap<Cable, Integer>();
+        this.side2cableDepr = new HashMap<Integer, Cable>();
+        this.connectionMappings = new int[4][4];
     }
 
     /**
@@ -43,11 +60,12 @@ public class Switch {
      *                 `{{TOP, LEFT}, {RIGHT, BOTTOM}}` or
      *                 `{{RIGHT, TOP, LEFT}}
      */
-    public Switch(Vector2 center, Short[][] mappings) {
+    public Switch(Vector2 center, int[][] mappings) {
         this.center = center;
         this.connectedCables = new HashSet<Cable>();
-        this.cable2side = new HashMap<Cable, Short>();
-        this.side2cable = new HashMap<Short, Cable>();
+        this.cable2side = new HashMap<Cable, Integer>();
+        this.side2cableDepr = new HashMap<Integer, Cable>();
+        this.connectionMappingsDepr = new HashMap<Integer, Set<Integer>>();
 
         /*
          * TODO pick correct image based on mapping
@@ -63,25 +81,25 @@ public class Switch {
          *  with a different rotation.
          */
 
-        Map<Short, Set<Short>> lookupMap = new HashMap<Short, Set<Short>>();
-        for(Short[] connection : mappings) {
+        Map<Integer, Set<Integer>> lookupMapDepr = new HashMap<Integer, Set<Integer>>();
+        int[][] lookupMap = new int[4][0];
+        for(int[] connection : mappings) {
 
-            Set<Short> connectionAsSet = new HashSet<Short>();
-            Collections.addAll(connectionAsSet, connection);
-
-            for(Short side : connection) {
-                Set<Short> connectedTo = new HashSet<Short>();
-                connectedTo.addAll(connectionAsSet);
-                connectedTo.remove(side);
-                lookupMap.put(side, connectedTo);
+            for(int side : connection) {
+                System.out.println("Switch constructor " +
+                        connection + " " +
+                        side + " -> " + lookupMap[side]);
+                int[] connectedTo = without(side, connection);
+                lookupMap[side] = concat(lookupMap[side], connectedTo);
             }
         }
         this.connectionMappings = lookupMap;
     }
 
-    public void connectTo(Cable cable, Short fromSide){
+    public void connectTo(Cable cable, int fromSide){
         this.cable2side.put(cable, fromSide);
-        this.side2cable.put(fromSide, cable);
+        this.side2cable[fromSide] = cable;
+        this.side2cableDepr.put(fromSide, cable);
         if(!cable.isConnectedTo(this)) {
             cable.connectTo(this, fromSide);
         }
@@ -103,23 +121,64 @@ public class Switch {
     //connectedCables: []
 
     public boolean directsPowerTo(Cable cable) {
-        // example1: for {{TOP, LEFT}}-switch, cables at LEFT (to generator), BOTTOM to socket
-        // ex1: cablesSide = BOTTOM = 2
-        System.out.println("in directsPowerTo");
+        /* examples:
+         *
+         * - for {{TOP, LEFT}}-switch = {{0,1}}
+         * - cables at LEFT (to generator) = 1
+         * - BOTTOM to socket = 2
+         * - questionedSideExternal = BOTTOM = 2
+         *
+         * Ex1:upIs = RIGHT = 3 should result in true
+         *
+         * Ex2:upIs = BOTTOM = 2 should result in false
+         */
 
-        /*
-        Short cablesSide = this.cable2side.get(cable);
-        int cablesSideAdjusted = (cablesSide + upIs) % 4;
-        //(cablesSide + upIs) % 4;
-        for(Short connectedSide : this.connectionMappings.get(cablesSideAdjusted)) {
-            int connectedSideAdjusted = (connectedSide - upIs) % 4;
-            Cable connectedCable = this.side2cable.get(connectedSide);
-            if(connectedCable.isPowered()) {
-                return true;
+        Integer questionedSideExternal = this.cable2side.get(cable); //ex1: 2 //ex2:2
+        int questionedSideInternal = (questionedSideExternal + upIs) % 4; //ex1: 1 //ex2:0
+
+        int[] connectedSides = this.connectionMappings[questionedSideInternal]; //ex1: {0} //ex2:{1}
+        for(int connectedSideInternal : connectedSides) {
+            int connectedSideExternal = (connectedSideInternal - upIs + 4) % 4; //ex1: 1 //ex2: 3
+
+            Cable connectedCable = side2cable[connectedSideExternal];
+            if(connectedCable != null && connectedCable.isPowered()) { //ex2: no cable connected to 3 (RIGHT)
+                return true; //ex1
             }
         }
-        */
 
         return false;
     }
+
+    private static int[] without(int x, int[] set) {
+        int[] filteredSet = new int[set.length - 1];
+        for(int i = 0, j = 0; i < set.length; i++) {
+            if(set[i] != x) {
+                filteredSet[j] = set[i];
+                j++;
+            }
+        }
+        return filteredSet;
+    }
+
+    private static void arr2stdout(int[][] array) {
+        for(int i = 0; i<array.length; i++) {
+            if(array[i] != null) {
+                for (int j = 0; j < array[i].length; j++) {
+                    System.out.println(i + " -> " + array[i][j]);
+                }
+            }
+        }
+    }
+
+    private static int[] concat(int[] arrA, int[] arrB) {
+        int[] ret = new int[arrA.length + arrB.length];
+        for(int i = 0; i < arrA.length; i++) {
+            ret[i] = arrA[i];
+        }
+        for(int i = arrA.length; i < ret.length; i++) {
+            ret[i] = arrB[i - arrA.length];
+        }
+        return ret;
+    }
+
 }
