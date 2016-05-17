@@ -140,24 +140,30 @@ public class Level {
         Generator[] generators = addGenerators(generatorsPos);
 
         //switches
-        Vector2[] switchesPos = {new Vector2(0.5f, 0.5f)};
-        Switch[] switches = addSwitches(switchesPos);
-
+        //Vector2[] switchesPos = {new Vector2(0.5f, 0.5f)};
+        //Switch[] switches = addSwitches(switchesPos);
+        Short[][] switchMappings = {{Switch.TOP, Switch.LEFT}};
+        Vector2 switchCenter = new Vector2(0.5f, 0.5f);
+        Switch[] switches = {new Switch(switchCenter, switchMappings)};
 
         //sockets
         Vector2[] socketsPos = {new Vector2(0.50f, 0.25f)};
         Socket[] sockets = addSockets(socketsPos);
 
+        System.out.println("deletme 1");
         //lines made into cables
         int[] joints = {1, 1};
         float[][] xCoord = {{0.25f, 0.50f}, {0.50f, 0.50f}};
         float[][] yCoord = {{0.50f, 0.50f}, {0.50f, 0.25f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
+        switches[0].connectTo(cables[0], Switch.LEFT);
+        switches[0].connectTo(cables[1], Switch.BOTTOM);
+        cables[0].connectTo(sockets[0]);
+        cables[1].connectTo(generators[0]);
+
         //returns Level
         return new Level(sockets, generators, switches, cables, 5000);
-
-        //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
     /*
     public static Level generateLevel1() {
