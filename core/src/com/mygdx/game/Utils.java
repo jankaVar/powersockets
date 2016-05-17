@@ -8,8 +8,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Color;
 
-import java.awt.*;
-
 /**
  * Created by moru on 07/05/16.
  */
@@ -17,25 +15,25 @@ public class Utils {
 
     public static void drawOrthagonalLine(SpriteBatch batch, Texture pixelImg, Vector2 start, Vector2 end, float width) {
         Vector2 diff = new Vector2(end).sub(start);
-        Direction direction;
+        Side direction;
         if(Math.abs(diff.x) > Math.abs(diff.y)) {
-            direction =  diff.x > 0 ? Direction.RIGHT : Direction.LEFT;
+            direction =  diff.x > 0 ? Side.RIGHT : Side.LEFT;
         } else {
-            direction =  diff.y > 0 ? Direction.UP : Direction.DOWN;
+            direction =  diff.y > 0 ? Side.TOP : Side.BOTTOM;
         }
         float length = Math.max(Math.abs(diff.x), Math.abs(diff.y));
 
         drawOrthagonalLine(batch, pixelImg, start, direction, length, width);
     }
 
-    public static void drawOrthagonalLine(SpriteBatch batch, Texture pixelImg, Vector2 start, Direction direction, float length, float width) {
-        if(direction == Direction.UP) {
+    public static void drawOrthagonalLine(SpriteBatch batch, Texture pixelImg, Vector2 start, Side direction, float length, float width) {
+        if(direction == Side.TOP) {
             batch.draw(pixelImg, start.x, start.y, width, length);
-        } else if(direction == Direction.DOWN) {
+        } else if(direction == Side.BOTTOM) {
             batch.draw(pixelImg, start.x, start.y, width, -length);
-        } else if(direction == Direction.RIGHT) {
+        } else if(direction == Side.RIGHT) {
             batch.draw(pixelImg, start.x, start.y, length, width);
-        } else if(direction == Direction.LEFT) {
+        } else if(direction == Side.LEFT) {
             batch.draw(pixelImg, start.x, start.y, -length, width);
         }
     }
