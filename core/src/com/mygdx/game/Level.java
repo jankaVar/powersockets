@@ -114,11 +114,12 @@ public class Level {
         //two sockets, one connected to a generator
 
         //generators
-        Vector2[] generatorsPos = {new Vector2(0.50f, 0.75f)};
-        Generator[] generators = addGenerators(generatorsPos);
+        //Vector2[] generatorsPos = {new Vector2(0.50f, 0.75f)};
+        //Generator[] generators = addGenerators(generatorsPos);
+        Generator[] generators = {};
 
         //sockets
-        Vector2[] socketsPos = {new Vector2(0.50f, 0.25f)};
+        Vector2[] socketsPos = {new Vector2(0.50f, 0.50f)};
         Socket[] sockets = addSockets(socketsPos);
 
         //lines made into cables
