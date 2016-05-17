@@ -227,6 +227,13 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
+        //TODO for degugging, remove me
+        Switch.upIs = (short)((Switch.upIs + 1) % 4);
+        for(Socket s : level.getSockets())
+            System.out.println(System.currentTimeMillis() +
+                    ":: UP=" + Switch.upIs +
+                    " Socket is powered? " + s.isPowered());
+
         //while success or defeat are playing, we shouldn't take inputs
         if(inSuccessAnimation() || inDefeatAnimation() || inTimeoutAnimation()) {
             return true;
