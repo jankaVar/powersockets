@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Collection;
@@ -15,12 +16,13 @@ public class Level {
     private final Collection<Switch> switches;
     public long startTime;
     public final long maxTime;
+    private String text;
     //private isVibratingSince;
     //private Rotation
     //private final maxTime
     //private remainingTime
 
-    public Level(long time) {
+    public Level(long time, String text) {
         this.cables = new HashSet<Cable>();
         this.sockets = new HashSet<Socket>();
         this.generators = new HashSet<Generator>();
@@ -28,17 +30,19 @@ public class Level {
 
         this.startTime = System.currentTimeMillis();
         this.maxTime = time;
+
+        this.text = text;
     }
-    public Level(Socket[] sockets, long time){
-        this(time);
+    public Level(Socket[] sockets, long time, String text){
+        this(time, text);
 
         for (Socket soc: sockets){
             this.sockets.add(soc);
         }
 
     }
-    public Level(Socket[] sockets, Generator[] generators, Cable[] cables, long time){
-        this(sockets, time);
+    public Level(Socket[] sockets, Generator[] generators, Cable[] cables, long time, String text){
+        this(sockets, time, text);
 
         for (Generator gen: generators){
             this.generators.add(gen);
@@ -48,8 +52,8 @@ public class Level {
             this.cables.add(cab);
         }
     }
-    public Level(Socket[] sockets, Generator[] generators, Switch[] switches, Cable[] cables, long time){
-        this(sockets, generators, cables, time);
+    public Level(Socket[] sockets, Generator[] generators, Switch[] switches, Cable[] cables, long time, String text){
+        this(sockets, generators, cables, time, text);
 
         for(Switch s : switches) {
             this.switches.add(s);
@@ -61,10 +65,10 @@ public class Level {
     }
 
     //all levels
-    public static Level generateLevel(int levelNumer){
+    public static Level generateLevel(int levelNumber){
         Level levelGen;
 
-        switch (levelNumer) {
+        switch (levelNumber) {
             case 1:  levelGen = generateLevel1();
                 break;
             case 2:  levelGen = generateLevel2();
@@ -75,8 +79,8 @@ public class Level {
                 break;
             case 5:  levelGen = generateLevel5();
                 break;
-            case 6: levelGen = generateSwitchDemoLevel();
-                break;
+          //  case 6: levelGen = generateSwitchDemoLevel();
+            //    break;
             default: levelGen = generateLevel2();
                 System.out.println("out of levels");
                 break;
@@ -167,12 +171,41 @@ public class Level {
         switches[0].connectTo(cables[0], Switch.LEFT);
 
         //returns Level
-        return new Level(sockets, generators, switches, cables, 5000);
+        return new Level(sockets, generators, switches, cables, 5000, "");
+
+    }
+
+    public static Level welcomeScreen() {
+        //four sockets, five generator
+
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.15f, 0.20f), new Vector2(0.50f, 0.15f), new Vector2(0.80f, 0.20f), new Vector2(0.25f, 0.75f), new Vector2(0.65f, 0.80f)};
+        Generator[] generators = addGenerators(generatorsPos);
+
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.25f, 0.45f), new Vector2(0.40f, 0.45f), new Vector2(0.55f, 0.45f), new Vector2(0.70f, 0.45f)};
+        Socket[] sockets = addSockets(socketsPos);
+
+        //lines made into cables
+        int[] joints = {2, 3, 2, 3, 3};
+        float[][] xCoord = {{0.15f, 0.25f, 0.25f}, {0.50f, 0.50f, 0.55f, 0.55f}, {0.80f, 0.80f, 0.70f}, {0.65f, 0.65f, 0.55f, 0.55f}, {0.25f, 0.25f, 0.40f, 0.40f}};
+        float[][] yCoord = {{0.20f, 0.20f, 0.45f}, {0.15f, 0.30f, 0.30f, 0.45f}, {0.20f, 0.45f, 0.45f}, {0.80f, 0.60f, 0.60f, 0.45f}, {0.75f, 0.60f, 0.60f, 0.45f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
+
+        //could be done nicer too, but nothing comes to my mind now
+        /*cables[0].connectTo(sockets[0]);
+        cables[0].connectTo(generators[0]);
+        cables[1].connectTo(sockets[0]);
+        cables[1].connectTo(generators[0]);
+        */
+
+        //returns Level
+        return new Level(sockets, generators, cables, 500000, "What would a child do when he/she sees these sockets?");
 
     }
 
     public static Level generateLevel1() {
-        //two sockets, one connected to a generator
+        //one sockets, no generator
 
         //generators
         Generator[] generators = {};
@@ -181,9 +214,6 @@ public class Level {
         Vector2[] socketsPos = {new Vector2(0.50f, 0.50f)};
         Socket[] sockets = addSockets(socketsPos);
 
-        Vector2[] switchesPos = {new Vector2(0.1f, 0.1f)};
-        Switch[] switches = addSwitches(switchesPos);
-
         //lines made into cables
         int[] joints = {};
         float[][] xCoord = {{}};
@@ -191,7 +221,7 @@ public class Level {
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //returns Level
-        return new Level(sockets, generators, switches, cables, 5000);
+        return new Level(sockets, generators, cables, 5000, "That's what you shouldn't do! \n\n ..now, try it differently ;)\n\n Level1");
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -218,7 +248,7 @@ public class Level {
         cables[0].connectTo(generators[0]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000);
+        return new Level(sockets, generators, cables, 5000, "Level 2");
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -246,7 +276,7 @@ public class Level {
         cables[1].connectTo(generators[0]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000);
+        return new Level(sockets, generators, cables, 5000, "Level 3");
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -276,7 +306,7 @@ public class Level {
         cables[2].connectTo(generators[0]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000);
+        return new Level(sockets, generators, cables, 5000, "Level 4");
 
     }
 
@@ -305,7 +335,7 @@ public class Level {
         cables[2].connectTo(generators[1]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000);
+        return new Level(sockets, generators, cables, 5000, "Level 5");
 
     }
 
@@ -324,5 +354,7 @@ public class Level {
     public Collection<Switch> getSwitches() {
         return switches;
     }
+
+    public String getText() {return text; }
 
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,7 +21,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private final static Color ELECTROCUTED_BG = new Color(1.0f, 1.0f, DEFAULT_BLUE, 1.0f);
     private final static Color SUCCESS_BG = new Color(0.0f, 1.0f, DEFAULT_BLUE, 1.0f);
     private final static Color TIMEOUT_BG = new Color(1.0f, 0.0f, DEFAULT_BLUE, 1.0f);
-    private final static int SUCCESS_ANIMATION_DURATION = 1000; //in ms
+    private final static int SUCCESS_ANIMATION_DURATION = 500; //in ms
     private final static int FAILURE_ANIMATION_DURATION = 1300; //in ms
     private final static int TIMEOUT_ANIMATION_DURATION = 5000; //in ms
 
@@ -30,15 +31,16 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     TextureRegion pixelReg;
     Sprite pixelSprite;
     Level level;
-    int levelNumber = 1;
-    float red = 0.0f;
-    float green = 0.02734375f;
+    int levelNumber = 0;
     private long timeOfSuccess = -1;
     private long timeOfFailure = -1;
     private Color bgColor = DEFAULT_BG;
     private float percentageTimeRemaining = 1.0f;
     private boolean timoutVibrationStarted = false;
 
+    private String timeoutText;
+
+    private BitmapFont font;
 
     public MyGdxGame() {
 
@@ -61,6 +63,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
                 0, 0, 1, 1
         );
 
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+
         Gdx.input.setInputProcessor(this);
 
         /*
@@ -75,7 +80,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         */
 
-        this.level = Level.generateLevel(levelNumber);
+        this.level = Level.welcomeScreen();
     }
 
     @Override
@@ -149,7 +154,18 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
                     SOCKET_SIZE,
                     SOCKET_SIZE
             );
-    }
+        }
+
+
+        if (inTimeoutAnimation() || inDefeatAnimation()){
+            font.draw(batch, timeoutText, 50, screenHeight - 20);
+        } else {
+
+            String text = this.level.getText();
+            if (text != ""){
+                font.draw(batch, text, 50, screenHeight - 20);
+            }
+        }
 
         batch.end();
     }
@@ -177,6 +193,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         } else if (inDefeatAnimation()) {
             this.bgColor = ELECTROCUTED_BG;
+            timeoutText = "Wrong socket!";
 
         } else if (inTimeoutAnimation()) {
             if(!this.timoutVibrationStarted) {
@@ -187,6 +204,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
             this.percentageTimeRemaining = 1.0f -
                     (System.currentTimeMillis() - level.startTime - level.maxTime) * 1.0f /
                             TIMEOUT_ANIMATION_DURATION;
+            timeoutText = "You shouldn't have waited so long! \n Penalty 5 seconds!";
 
         } else {
             this.bgColor = DEFAULT_BG;
@@ -228,9 +246,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
 
         //TODO for degugging, remove me
-        Switch.setUpIs(Switch.getUpIs() + 1);
+        //Switch.setUpIs(Switch.getUpIs() + 1);
         for(Socket s : level.getSockets())
-            System.out.println(System.currentTimeMillis() +
+            System.out.println("level" + levelNumber + " "+ System.currentTimeMillis() +
                     ":: UP=" + Switch.getUpIs() +
                     " Socket is powered? " + s.isPowered());
 
