@@ -132,7 +132,7 @@ public class Level {
         return cable;
     }
 
-    public static Level generateLevel1() { //TODO for debugging, replace with original level1
+   /* public static Level generateLevel1() { //TODO for debugging, replace with original level1
         //two sockets, one connected to a generator
 
         //generators
@@ -164,8 +164,8 @@ public class Level {
 
         //returns Level
         return new Level(sockets, generators, switches, cables, 5000);
-    }
-    /*
+    }*/
+
     public static Level generateLevel1() {
         //two sockets, one connected to a generator
 
@@ -190,7 +190,7 @@ public class Level {
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
-    */
+
 
     public static Level generateLevel2() {
         //two sockets, one connected to a generator
