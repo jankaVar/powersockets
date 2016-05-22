@@ -79,8 +79,10 @@ public class Level {
                 break;
             case 5:  levelGen = generateLevel5();
                 break;
-          //  case 6: levelGen = generateSwitchDemoLevel();
-            //    break;
+            case 6: levelGen = generateLevel6();
+                break;
+            case 7: levelGen = generateLevel7();
+                break;
             default: levelGen = generateLevel2();
                 System.out.println("out of levels");
                 break;
@@ -191,13 +193,6 @@ public class Level {
         float[][] xCoord = {{0.15f, 0.25f, 0.25f}, {0.50f, 0.50f, 0.55f, 0.55f}, {0.80f, 0.80f, 0.70f}, {0.65f, 0.65f, 0.55f, 0.55f}, {0.25f, 0.25f, 0.40f, 0.40f}};
         float[][] yCoord = {{0.20f, 0.20f, 0.45f}, {0.15f, 0.30f, 0.30f, 0.45f}, {0.20f, 0.45f, 0.45f}, {0.80f, 0.60f, 0.60f, 0.45f}, {0.75f, 0.60f, 0.60f, 0.45f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
-
-        //could be done nicer too, but nothing comes to my mind now
-        /*cables[0].connectTo(sockets[0]);
-        cables[0].connectTo(generators[0]);
-        cables[1].connectTo(sockets[0]);
-        cables[1].connectTo(generators[0]);
-        */
 
         //returns Level
         return new Level(sockets, generators, cables, 500000, "What would a child do when he/she sees these sockets?");
@@ -336,6 +331,63 @@ public class Level {
 
         //returns Level
         return new Level(sockets, generators, cables, 5000, "Level 5");
+
+    }
+
+    public static Level generateLevel6() {
+        //two sockets, one generators!
+
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.50f, 0.55f)};
+        Generator[] generators = addGenerators(generatorsPos);
+
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.25f, 0.20f), new Vector2(0.80f, 0.20f)};
+        Socket[] sockets = addSockets(socketsPos);
+
+        //lines made into cables
+        int[] joints = {10, 5};
+        float[][] xCoord = {{0.25f, 0.25f, 0.10f, 0.10f, 0.90f, 0.90f, 0.20f, 0.20f, 0.80f, 0.80f, 0.50f}, {0.80f, 0.80f, 0.25f, 0.25f, 0.70f, 0.70f}};
+        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.95f, 0.95f, 0.40f, 0.40f, 0.80f, 0.80f, 0.55f, 0.55f}, {0.20f, 0.45f, 0.45f, 0.75f, 0.75f, 0.5f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
+
+        //could be done nicer too, but nothing comes to my mind now
+        cables[0].connectTo(sockets[0]);
+        cables[0].connectTo(generators[0]);
+        cables[1].connectTo(sockets[1]);
+
+        //returns Level
+        return new Level(sockets, generators, cables, 5000, "Level 6");
+
+    }
+
+    public static Level generateLevel7() {
+        //three sockets, one generators!
+
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.50f, 0.55f)};
+        Generator[] generators = addGenerators(generatorsPos);
+
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.25f, 0.20f), new Vector2(0.80f, 0.20f),new Vector2(0.50f, 0.20f) };
+        Socket[] sockets = addSockets(socketsPos);
+
+        //lines made into cables
+        int[] joints = {10, 5, 5};
+        float[][] xCoord = {{0.25f, 0.25f, 0.10f, 0.10f, 0.90f, 0.90f, 0.20f, 0.20f, 0.80f, 0.80f, 0.50f}, {0.80f, 0.80f, 0.25f, 0.25f, 0.50f, 0.50f}, {0.50f, 0.50f, 0.95f, 0.95f, 0.35f, 0.35f}};
+        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.95f, 0.95f, 0.40f, 0.40f, 0.80f, 0.80f, 0.55f, 0.55f}, {0.20f, 0.45f, 0.45f, 0.75f, 0.75f, 0.55f}, {0.20f, 0.35f, 0.35f, 0.85f, 0.85f, 0.55f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
+
+        //could be done nicer too, but nothing comes to my mind now
+        cables[0].connectTo(sockets[0]);
+        cables[0].connectTo(generators[0]);
+        cables[1].connectTo(sockets[1]);
+        cables[1].connectTo(generators[0]);
+        cables[2].connectTo(sockets[2]);
+
+
+        //returns Level
+        return new Level(sockets, generators, cables, 5000, "Level 7");
 
     }
 

@@ -38,7 +38,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private float percentageTimeRemaining = 1.0f;
     private boolean timoutVibrationStarted = false;
 
-    private String timeoutText;
+    private String timeoutText = "";
 
     private BitmapFont font;
 
