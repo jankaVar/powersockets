@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -13,8 +15,9 @@ public class Switch extends Connectable {
     //center: (x,y)
     //connectedCables: []
 
+    //to be changed - socket.png to switch-to-left.png or something like it
     public Switch(Vector2 center) {
-        super(center);
+        super(center, new TextureRegion(new Texture("socket.png")));
     }
 
     public boolean directsPowerTo(Cable cable) {

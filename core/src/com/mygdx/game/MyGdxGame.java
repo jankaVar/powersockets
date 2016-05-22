@@ -1,18 +1,26 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.google.gwt.widget.client.TextButton;
 
-public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
+public class MyGdxGame extends InputAdapter implements ApplicationListener{
 
     private final static float DEFAULT_GREEN = 0.02734375f;
     private final static float DEFAULT_BLUE = 0.16796875f;
@@ -39,28 +47,60 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private float percentageTimeRemaining = 1.0f;
     private boolean timoutVibrationStarted = false;
 
+    private Stage stage;
 
     public MyGdxGame() {
 
     }
 
-    /// <application-adapter>
+    /// <application-listener>
     @Override
     public void create () {
-        this.batch = new SpriteBatch();
-        this.socketImg = new Texture("socket.png");
-        this.generatorImg = new Texture("generator.png");
-        this.pixelImg = new Texture("pixel.png");
-        this.pixelReg = new TextureRegion(
+
+        //this.batch = new SpriteBatch();
+        //this.socketImg = new Texture("socket.png");
+        //this.generatorImg = new Texture("generator.png");
+        //this.pixelImg = new Texture("pixel.png");
+        /*this.pixelReg = new TextureRegion(
                 new Texture("pixel.png"),
                 0.0f, 0.0f, 1.0f, 1.0f
         );
         this.pixelSprite = new Sprite(
                 new Texture("pixel.png"),
                 0, 0, 1, 1
-        );
+        );*/
 
-        Gdx.input.setInputProcessor(this);
+
+        final int screenHeight = Gdx.graphics.getHeight();
+        final int screenWidth = Gdx.graphics.getWidth();
+        final int drawAreaSize = Math.min(screenHeight, screenWidth);
+
+        final float SOCKET_SIZE = 0.2f * drawAreaSize;
+
+        //stage = new Stage(new FitViewport(640, 480)); - try when it works
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        
+
+        Table table = new Table();
+        stage.addActor(table);
+        table.setSize(260, 195);
+        table.setPosition(190, 142);
+
+        table.debug();
+
+
+        /*for(Cable cable : this.level.getCables()) {
+            stage.addActor(cable);
+            cable.setSize(SOCKET_SIZE, SOCKET_SIZE);
+            cable.setPosition();
+        }
+
+        for(Socket socket : this.level.getSockets()) {
+            stage.addActor(socket);
+        }
+*/
 
         /*
         TODO use non-continuous rendering to save on battery:
@@ -78,6 +118,42 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     }
 
     @Override
+    public void resize (int width, int height) {
+        // See below for what true means.
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void render () {
+
+        this.update();
+
+        Gdx.gl.glClearColor(this.red, this.green, 0.16796875f, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //clears the screen
+
+        //delta - time between the start of the previous and the start of the current call to render()
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+    }
+
+    @Override
+    public void resume(){
+
+    }
+
+    @Override
+    public void pause(){
+
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
+
+
+    //another render function up
+   /* @Override
     public void render () {
         this.update();
 
@@ -141,8 +217,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         }
 
         batch.end();
-    }
-    /// </application-adapter>
+    }*/
+    /// </application-listener>
 
     public void update() {
 
@@ -212,7 +288,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         return System.currentTimeMillis() > level.startTime + level.maxTime + TIMEOUT_ANIMATION_DURATION;
     }
 
-    /// <input-processor>
+    /// <input-adapter>
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
@@ -269,37 +345,4 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         this.timeOfFailure = System.currentTimeMillis();
         this.bgColor = ELECTROCUTED_BG;
     }
-    @Override
-    public boolean keyDown (int keycode) { return false; }
-
-    @Override
-    public boolean keyUp (int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped (char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp (int x, int y, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged (int x, int y, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved (int x, int y) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled (int amount) {
-        return false;
-    }
-    /// </input-processor>
 }

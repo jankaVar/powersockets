@@ -1,14 +1,21 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
 import java.util.Collection;
 import java.util.HashSet;
 
 /**
  * Created by moru on 05/05/16.
  */
-public class Cable {
+public class Cable extends Actor{
     private Collection<Connectable> connectables;
     private Collection<LineSegment> cableSegments;
+    private TextureRegion region;
 
     public Cable(LineSegment...segments){
         this.connectables = new HashSet<Connectable>();
@@ -16,6 +23,15 @@ public class Cable {
         for(LineSegment s : segments) {
             this.cableSegments.add(s);
         }
+        this.region = new TextureRegion(new Texture("pixel.png"));
+    }
+
+    public void draw (Batch batch, float parentAlpha) {
+        //do I need color?
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(region, getX(), getY(), getOriginX(), getOriginY(),
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
     public void connectTo(Connectable connectable){

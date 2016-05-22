@@ -9,3 +9,7 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 eclipse.project {
     name = appName + "-core"
 }
+dependencies {
+    compile 'com.badlogicgames.gdx:gdx-backend-gwt:1.9.2'
+    compile 'com.google.gwt:gwt-servlet:2.6.0'
+}

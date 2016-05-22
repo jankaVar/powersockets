@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -9,7 +11,7 @@ public class Socket extends Connectable {
     //center: (x,y)
     //connectedCables: []
     public Socket(Vector2 center) {
-        super(center);
+        super(center, new TextureRegion(new Texture("socket.png")));
     }
 
     public boolean isPowered() {
