@@ -75,6 +75,8 @@ public class Level {
                 break;
             case 5:  levelGen = generateLevel5();
                 break;
+            case 6: levelGen = generateSwitchDemoLevel();
+                break;
             default: levelGen = generateLevel2();
                 System.out.println("out of levels");
                 break;
@@ -132,7 +134,8 @@ public class Level {
         return cable;
     }
 
-   /* public static Level generateLevel1() { //TODO for debugging, replace with original level1
+
+    public static Level generateSwitchDemoLevel() { //TODO for debugging, replace with original level1
         //two sockets, one connected to a generator
 
         //generators
@@ -142,7 +145,7 @@ public class Level {
         //switches
         //Vector2[] switchesPos = {new Vector2(0.5f, 0.5f)};
         //Switch[] switches = addSwitches(switchesPos);
-        Short[][] switchMappings = {{Switch.TOP, Switch.LEFT}};
+        int[][] switchMappings = {{Switch.TOP, Switch.LEFT}};
         Vector2 switchCenter = new Vector2(0.5f, 0.5f);
         Switch[] switches = {new Switch(switchCenter, switchMappings)};
 
@@ -157,14 +160,16 @@ public class Level {
         float[][] yCoord = {{0.50f, 0.50f}, {0.50f, 0.25f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
-        switches[0].connectTo(cables[0], Switch.LEFT);
+        cables[1].connectTo(sockets[0]);
         switches[0].connectTo(cables[1], Switch.BOTTOM);
-        cables[0].connectTo(sockets[0]);
-        cables[1].connectTo(generators[0]);
+
+        cables[0].connectTo(generators[0]);
+        switches[0].connectTo(cables[0], Switch.LEFT);
 
         //returns Level
         return new Level(sockets, generators, switches, cables, 5000);
-    }*/
+
+    }
 
     public static Level generateLevel1() {
         //two sockets, one connected to a generator
@@ -190,7 +195,6 @@ public class Level {
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
-
 
     public static Level generateLevel2() {
         //two sockets, one connected to a generator

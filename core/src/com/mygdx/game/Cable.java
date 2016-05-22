@@ -26,7 +26,7 @@ public class Cable {
             connectable.connectTo(this);
         }
     }
-    public void connectTo(Switch sw, Short onSideXOfSwitch){
+    public void connectTo(Switch sw, int onSideXOfSwitch){
         this.switches.add(sw);
         if(!sw.isConnectedTo(this)) {
             sw.connectTo(this, onSideXOfSwitch);

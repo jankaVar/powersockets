@@ -23,7 +23,7 @@ public class Socket extends Connectable {
 
     public boolean socketTouched(Vector2 center, float SOCKET_SIZE) {
         Vector2 socketCenter = getCenter();
-        System.out.println("socketcenter "+ socketCenter.x + " y " + socketCenter.y + " x >" + center.x + " y " + center.y + " socket size " + SOCKET_SIZE );
+        //System.out.println("socketcenter "+ socketCenter.x + " y " + socketCenter.y + " x >" + center.x + " y " + center.y + " socket size " + SOCKET_SIZE );
         if ((socketCenter.x + SOCKET_SIZE/2 > center.x) && (socketCenter.x - SOCKET_SIZE/2 < center.x) &&
                 (socketCenter.y + SOCKET_SIZE/2 > center.y) && (socketCenter.y - SOCKET_SIZE/2 < center.y)) {
             return true;
