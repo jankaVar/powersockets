@@ -153,7 +153,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
             float y = center.y * drawAreaSize - SOCKET_SIZE / 2;
             float width = SOCKET_SIZE;
             float height = SOCKET_SIZE;
-            float rotation = 45;
+            float defaultRotation = -90; //for some reason the sprite is flipped by default
+            float rotation = -sw.getUpIs() * 90.0f + defaultRotation;
             //taken from: http://stackoverflow.com/questions/9445035/rotate-image-clockwise-using-libgdx
             //also interesting: http://stackoverflow.com/questions/24748350/libgdx-rotate-a-texture-when-drawing-it-with-spritebatch
             batch.draw(
@@ -261,7 +262,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
 
         //TODO for degugging, remove me
-        //Switch.setUpIs(Switch.getUpIs() + 1);
+        Switch.setUpIs(Switch.getUpIs() + 1);
         for(Socket s : level.getSockets())
             System.out.println("level" + levelNumber + " "+ System.currentTimeMillis() +
                     ":: UP=" + Switch.getUpIs() +
