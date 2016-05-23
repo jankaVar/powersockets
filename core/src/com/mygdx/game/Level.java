@@ -178,7 +178,7 @@ public class Level {
         switches[0].connectTo(cables[0], Switch.LEFT);
 
         //returns Level
-        return new Level(sockets, generators, switches, cables, 5000, "");
+        return new Level(sockets, generators, switches, cables, 3300, "");
 
     }
 
@@ -200,7 +200,7 @@ public class Level {
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //returns Level
-        return new Level(sockets, generators, cables, 500000, "What would a child do when he/she sees these sockets?");
+        return new Level(sockets, generators, cables, 330000, "What would a child do when he/she sees these sockets?");
 
     }
 
@@ -221,7 +221,7 @@ public class Level {
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000, "That's what you shouldn't do! \n\n ..now, try it differently ;)\n\n Level1");
+        return new Level(sockets, generators, cables, 3300, "That's what you shouldn't do! \n\n ..now, try it differently ;)\n\n Level1");
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -248,7 +248,7 @@ public class Level {
         cables[0].connectTo(generators[0]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000, "Level 2");
+        return new Level(sockets, generators, cables, 3300, "Level 2");
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -276,7 +276,7 @@ public class Level {
         cables[1].connectTo(generators[0]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000, "Level 3");
+        return new Level(sockets, generators, cables, 3300, "Level 3");
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
@@ -306,7 +306,7 @@ public class Level {
         cables[2].connectTo(generators[0]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000, "Level 4");
+        return new Level(sockets, generators, cables, 3300, "Level 4");
 
     }
 
@@ -335,7 +335,7 @@ public class Level {
         cables[2].connectTo(generators[1]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000, "Level 5");
+        return new Level(sockets, generators, cables, 3300, "Level 5");
 
     }
 
@@ -362,7 +362,7 @@ public class Level {
         cables[1].connectTo(sockets[1]);
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000, "Level 6");
+        return new Level(sockets, generators, cables, 3300, "Level 6");
 
     }
 
@@ -392,7 +392,7 @@ public class Level {
 
 
         //returns Level
-        return new Level(sockets, generators, cables, 5000, "Level 7");
+        return new Level(sockets, generators, cables, 3300, "Level 7");
 
     }
 
