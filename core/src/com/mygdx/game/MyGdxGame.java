@@ -161,8 +161,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
                     switchSprite,
                     x,
                     y,
-                    width/2.0f,
-                    height/2.0f,
+                    width/2.0f, //origin
+                    height/2.0f, //origin
                     width,
                     height,
                     1f,
