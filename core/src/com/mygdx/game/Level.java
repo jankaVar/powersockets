@@ -221,7 +221,7 @@ public class Level {
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //returns Level
-        return new Level(sockets, generators, cables, 3300, "That's what you shouldn't do! \n\n ..now, try it differently ;)\n\n Level1");
+        return new Level(sockets, generators, cables, 5000, "That's what you shouldn't do! \n\n ..now, try it differently ;)\n\n Level1");
 
         //super simple variant: just svg, the coordinates for the right sockets and the correct rotation?
     }
