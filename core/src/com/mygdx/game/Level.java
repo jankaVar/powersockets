@@ -68,7 +68,11 @@ public class Level {
     public static Level generateLevel(int levelNumber){
         Level levelGen;
 
+        levelNumber = levelNumber % 8;
+
         switch (levelNumber) {
+            case 0: levelGen = welcomeScreen();
+                break;
             case 1:  levelGen = generateLevel1();
             //case 1:  levelGen = generateSwitchDemoLevel();
                 break;
