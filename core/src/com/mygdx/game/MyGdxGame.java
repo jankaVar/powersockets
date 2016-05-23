@@ -41,6 +41,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private String timeoutText = "";
 
     private BitmapFont font;
+    private Sprite switchSprite;
 
     public MyGdxGame() {
 
@@ -53,6 +54,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         this.socketImg = new Texture("socket.png");
         this.generatorImg = new Texture("generator.png");
         this.switchImg = new Texture("switch_top_to_left.png");
+        this.switchSprite = new Sprite(this.switchImg, 0, 0, 256, 256);
         this.pixelImg = new Texture("pixel.png");
         this.pixelReg = new TextureRegion(
                 new Texture("pixel.png"),
@@ -147,12 +149,25 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         }
         for(Switch sw : this.level.getSwitches()) {
             Vector2 center = sw.getCenter();
+            float x = center.x * drawAreaSize - SOCKET_SIZE / 2;
+            float y = center.y * drawAreaSize - SOCKET_SIZE / 2;
+            float width = SOCKET_SIZE;
+            float height = SOCKET_SIZE;
+            float rotation = 45;
+            //taken from: http://stackoverflow.com/questions/9445035/rotate-image-clockwise-using-libgdx
+            //also interesting: http://stackoverflow.com/questions/24748350/libgdx-rotate-a-texture-when-drawing-it-with-spritebatch
             batch.draw(
-                    switchImg,
-                    center.x * drawAreaSize - SOCKET_SIZE / 2,
-                    center.y * drawAreaSize - SOCKET_SIZE / 2,
-                    SOCKET_SIZE,
-                    SOCKET_SIZE
+                    switchSprite,
+                    x,
+                    y,
+                    width/2.0f,
+                    height/2.0f,
+                    width,
+                    height,
+                    1f,
+                    1f,
+                    rotation,
+                    false
             );
         }
 

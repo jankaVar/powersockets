@@ -70,6 +70,7 @@ public class Level {
 
         switch (levelNumber) {
             case 1:  levelGen = generateLevel1();
+            //case 1:  levelGen = generateSwitchDemoLevel();
                 break;
             case 2:  levelGen = generateLevel2();
                 break;
