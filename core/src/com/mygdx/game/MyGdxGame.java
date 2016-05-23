@@ -170,13 +170,15 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
                     rotation,
                     false
             );
+
+            //switchSprite.setOrigin(width/2.0f, height/2.0f);
         }
 
-
+        float sizefactor = 0.0025f;
+        font.getData().setScale(sizefactor*drawAreaSize, sizefactor*drawAreaSize);
         if (inTimeoutAnimation() || inDefeatAnimation()){
             font.draw(batch, timeoutText, 50, screenHeight - 20);
         } else {
-
             String text = this.level.getText();
             if (text != ""){
                 font.draw(batch, text, 50, screenHeight - 20);
