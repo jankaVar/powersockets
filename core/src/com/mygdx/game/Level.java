@@ -265,9 +265,9 @@ public class Level {
         Socket[] sockets = addSockets(socketsPos);
 
         //lines made into cables
-        int[] joints = {3, 3};
-        float[][] xCoord = {{0.25f, 0.25f, 0.75f, 0.75f}, {0.75f, 0.75f, 0.50f, 0.50f}};
-        float[][] yCoord = {{0.20f, 0.50f, 0.50f, 0.75f}, {0.20f, 0.35f, 0.35f, 0.75f}};
+        int[] joints = {3, 3, 1};
+        float[][] xCoord = {{0.25f, 0.25f, 0.75f, 0.75f}, {0.75f, 0.75f, 0.50f, 0.50f}, {0.4f, 0.4f}};
+        float[][] yCoord = {{0.20f, 0.50f, 0.50f, 0.75f}, {0.20f, 0.35f, 0.35f, 0.75f}, {0.2f, 0.6f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //could be done nicer too, but nothing comes to my mind now
@@ -293,9 +293,9 @@ public class Level {
         Socket[] sockets = addSockets(socketsPos);
 
         //lines made into cables
-        int[] joints = {5, 6, 6};
-        float[][] xCoord = {{0.20f, 0.20f, 0.90f, 0.90f, 0.60f, 0.60f}, {0.45f, 0.45f, 0.25f, 0.25f, 0.40f, 0.40f, 0.70f}, {0.80f, 0.80f, 0.15f, 0.15f, 0.70f, 0.70f, 0.15f}};
-        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.70f, 0.70f, 0.20f}, {0.20f, 0.45f, 0.45f, 0.70f, 0.70f, 0.50f, 0.50f}, {0.20f, 0.40f, 0.40f, 0.65f, 0.65f, 0.85f, 0.85f}};
+        int[] joints = {5, 6, 6, 4};
+        float[][] xCoord = {{0.20f, 0.20f, 0.90f, 0.90f, 0.60f, 0.60f}, {0.45f, 0.45f, 0.25f, 0.25f, 0.40f, 0.40f, 0.70f}, {0.80f, 0.80f, 0.15f, 0.15f, 0.70f, 0.70f, 0.15f}, {0.7f, 0.7f, 0.8f, 0.8f, 0.9f}};
+        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.70f, 0.70f, 0.20f}, {0.20f, 0.45f, 0.45f, 0.70f, 0.70f, 0.50f, 0.50f}, {0.20f, 0.40f, 0.40f, 0.65f, 0.65f, 0.85f, 0.85f}, {0.5f, 0.6f, 0.6f, 0.8f, 0.8f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //could be done nicer too, but nothing comes to my mind now
@@ -322,9 +322,9 @@ public class Level {
         Socket[] sockets = addSockets(socketsPos);
 
         //lines made into cables
-        int[] joints = {5, 3, 5};
-        float[][] xCoord = {{0.20f, 0.20f, 0.95f, 0.95f, 0.35f, 0.35f}, {0.50f, 0.50f, 0.85f, 0.85f}, {0.80f, 0.80f, 0.15f, 0.15f, 0.65f, 0.65f}};
-        float[][] yCoord = {{0.20f, 0.40f, 0.40f, 0.60f, 0.60f, 0.75f}, {0.20f, 0.50f, 0.50f, 0.75f}, {0.20f, 0.35f, 0.35f, 0.90f, 0.90f, 0.75f}};
+        int[] joints = {5, 1, 5, 3};
+        float[][] xCoord = {{0.20f, 0.20f, 0.95f, 0.95f, 0.35f, 0.35f}, {0.50f, 0.50f}, {0.80f, 0.80f, 0.15f, 0.15f, 0.65f, 0.65f}, {0.20f, 0.20f, 0.85f, 0.85f}};
+        float[][] yCoord = {{0.20f, 0.40f, 0.40f, 0.60f, 0.60f, 0.75f}, {0.20f, 0.80f}, {0.20f, 0.35f, 0.35f, 0.90f, 0.90f, 0.75f}, {0.60f, 0.50f, 0.50f, 0.75f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //could be done nicer too, but nothing comes to my mind now
@@ -351,9 +351,9 @@ public class Level {
         Socket[] sockets = addSockets(socketsPos);
 
         //lines made into cables
-        int[] joints = {10, 5};
-        float[][] xCoord = {{0.25f, 0.25f, 0.10f, 0.10f, 0.90f, 0.90f, 0.20f, 0.20f, 0.80f, 0.80f, 0.50f}, {0.80f, 0.80f, 0.25f, 0.25f, 0.70f, 0.70f}};
-        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.95f, 0.95f, 0.40f, 0.40f, 0.80f, 0.80f, 0.55f, 0.55f}, {0.20f, 0.45f, 0.45f, 0.75f, 0.75f, 0.5f}};
+        int[] joints = {10, 5, 2, 2};
+        float[][] xCoord = {{0.25f, 0.25f, 0.10f, 0.10f, 0.90f, 0.90f, 0.20f, 0.20f, 0.80f, 0.80f, 0.50f}, {0.80f, 0.80f, 0.25f, 0.25f, 0.70f, 0.70f}, {0.05f, 0.65f, 0.65f}, {0.35f, 0.35f, 0.95f}};
+        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.95f, 0.95f, 0.40f, 0.40f, 0.80f, 0.80f, 0.55f, 0.55f}, {0.20f, 0.45f, 0.45f, 0.75f, 0.75f, 0.50f}, {0.70f, 0.70f, 0.85f}, {0.55f, 0.9f, 0.9f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //could be done nicer too, but nothing comes to my mind now
@@ -378,9 +378,9 @@ public class Level {
         Socket[] sockets = addSockets(socketsPos);
 
         //lines made into cables
-        int[] joints = {10, 5, 5};
-        float[][] xCoord = {{0.25f, 0.25f, 0.10f, 0.10f, 0.90f, 0.90f, 0.20f, 0.20f, 0.80f, 0.80f, 0.50f}, {0.80f, 0.80f, 0.25f, 0.25f, 0.50f, 0.50f}, {0.50f, 0.50f, 0.95f, 0.95f, 0.35f, 0.35f}};
-        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.95f, 0.95f, 0.40f, 0.40f, 0.80f, 0.80f, 0.55f, 0.55f}, {0.20f, 0.45f, 0.45f, 0.75f, 0.75f, 0.55f}, {0.20f, 0.35f, 0.35f, 0.85f, 0.85f, 0.55f}};
+        int[] joints = {10, 5, 5, 2, 3};
+        float[][] xCoord = {{0.25f, 0.25f, 0.10f, 0.10f, 0.90f, 0.90f, 0.20f, 0.20f, 0.80f, 0.80f, 0.50f}, {0.80f, 0.80f, 0.25f, 0.25f, 0.50f, 0.50f}, {0.50f, 0.50f, 0.95f, 0.95f, 0.35f, 0.35f}, {0.05f, 0.3f, 0.3f}, {0.4f, 0.7f, 0.7f, 1f}};
+        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.95f, 0.95f, 0.40f, 0.40f, 0.80f, 0.80f, 0.55f, 0.55f}, {0.20f, 0.45f, 0.45f, 0.75f, 0.75f, 0.55f}, {0.20f, 0.35f, 0.35f, 0.85f, 0.85f, 0.55f}, {0.9f, 0.9f, 0.7f}, {0.7f, 0.7f, 0.5f, 0.5f}};
         Cable[] cables = addCables(joints, xCoord, yCoord);
 
         //could be done nicer too, but nothing comes to my mind now
