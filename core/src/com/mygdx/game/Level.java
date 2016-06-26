@@ -68,13 +68,12 @@ public class Level {
     public static Level generateLevel(int levelNumber){
         Level levelGen;
 
-        levelNumber = levelNumber % 8;
+        levelNumber = levelNumber % 9;
 
         switch (levelNumber) {
             case 0: levelGen = welcomeScreen();
                 break;
             case 1:  levelGen = generateLevel1();
-            //case 1:  levelGen = generateSwitchDemoLevel();
                 break;
             case 2:  levelGen = generateLevel2();
                 break;
@@ -87,6 +86,8 @@ public class Level {
             case 6: levelGen = generateLevel6();
                 break;
             case 7: levelGen = generateLevel7();
+                break;
+            case 8: levelGen = generateLevel8();
                 break;
             default: levelGen = generateLevel2();
                 System.out.println("out of levels");
@@ -367,6 +368,33 @@ public class Level {
     }
 
     public static Level generateLevel7() {
+        //two sockets, one generators!
+
+        //generators
+        Vector2[] generatorsPos = {new Vector2(0.50f, 0.55f)};
+        Generator[] generators = addGenerators(generatorsPos);
+
+        //sockets
+        Vector2[] socketsPos = {new Vector2(0.25f, 0.20f), new Vector2(0.80f, 0.20f)};
+        Socket[] sockets = addSockets(socketsPos);
+
+        //lines made into cables
+        int[] joints = {8, 6, 2, 2};
+        float[][] xCoord = {{0.25f, 0.25f, 0.10f, 0.10f, 0.90f, 0.90f, 0.20f, 0.20f, 0.55f}, {0.80f, 0.80f, 0.25f, 0.25f, 0.70f, 0.70f, 0.55f}, {0.05f, 0.65f, 0.65f}, {0.35f, 0.35f, 0.95f}};
+        float[][] yCoord = {{0.20f, 0.35f, 0.35f, 0.95f, 0.95f, 0.40f, 0.40f, 0.80f, 0.80f}, {0.20f, 0.45f, 0.45f, 0.75f, 0.75f, 0.55f, 0.55f}, {0.70f, 0.70f, 0.85f}, {0.55f, 0.9f, 0.9f}};
+        Cable[] cables = addCables(joints, xCoord, yCoord);
+
+        //could be done nicer too, but nothing comes to my mind now
+        cables[0].connectTo(sockets[0]);
+        cables[0].connectTo(generators[0]);
+        cables[1].connectTo(sockets[1]);
+
+        //returns Level
+        return new Level(sockets, generators, cables, 3300, "Level 6");
+
+    }
+
+    public static Level generateLevel8() {
         //three sockets, one generators!
 
         //generators
