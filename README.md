@@ -1,5 +1,11 @@
-# powersockets
-Android game for Game Design
+# Powersockets
+
+Android game for Game Design.
+
+[**Get the game prototype**](https://github.com/jankaVar/powersockets/releases/)
+
+
+## Building it yourself
 
 
 To build and run on desktop paste execute the following in the project's root-folder:
